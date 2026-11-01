@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Diagramas DDD — Oficina API</title>
+  <style>
+    @page { size: A4 landscape; margin: 12mm; }
+    body { font: 14px Arial, sans-serif; color: #17202a; }
+    h1, h2 { color: #1b4f72; }
+    h2 { break-before: page; }
+    h2:first-of-type { break-before: auto; }
+    img { display: block; width: 100%; max-height: 155mm; object-fit: contain; }
+    p { line-height: 1.45; }
+  </style>
+</head>
+<body>
+  <h1>Diagramas DDD e arquitetura — Sistema da Oficina</h1>
+
+  <h2>1. Bounded Contexts</h2>
+  <img src="images/bounded-contexts.svg" alt="Bounded Contexts">
+  <p>Ordens de Serviço é o Core Domain. Cadastro, Catálogo e Estoque são contextos de suporte; Identidade e Acesso é genérico. No MVP todos vivem no mesmo monólito.</p>
+
+  <h2>2. Máquina de estados da Ordem de Serviço</h2>
+  <img src="images/maquina-estados.svg" alt="Máquina de estados">
+  <p>A rejeição permite revisão pelo diagnóstico; a aprovação baixa estoque e inicia a execução. As demais transições seguem uma única sequência válida.</p>
+
+  <h2>3. Modelo de dados resumido</h2>
+  <img src="images/modelo-dados.svg" alt="Modelo de dados">
+  <p>Itens guardam snapshots de descrição e preço. Movimentos de estoque ligam a peça à OS que causou a saída.</p>
+</body>
+</html>
+

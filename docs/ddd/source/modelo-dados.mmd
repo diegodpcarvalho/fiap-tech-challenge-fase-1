@@ -1,0 +1,11 @@
+erDiagram
+  CUSTOMER ||--o{ VEHICLE : possui
+  CUSTOMER ||--o{ WORK_ORDER : solicita
+  VEHICLE ||--o{ WORK_ORDER : recebe
+  WORK_ORDER ||--|{ WORK_ORDER_SERVICE_ITEM : inclui
+  CATALOG_SERVICE ||--o{ WORK_ORDER_SERVICE_ITEM : referencia
+  WORK_ORDER ||--o{ WORK_ORDER_PART_ITEM : inclui
+  PART ||--o{ WORK_ORDER_PART_ITEM : referencia
+  PART ||--o{ STOCK_MOVEMENT : movimenta
+  WORK_ORDER ||--o{ STOCK_MOVEMENT : origina
+

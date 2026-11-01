@@ -1,0 +1,17 @@
+flowchart LR
+  ADM[Administrador]:::actor --> C1[Cadastrar peca]:::command
+  C1 --> AG[Estoque da peca]:::aggregate
+  AG --> E1[Peca cadastrada]:::event
+  ADM --> C2[Ajustar estoque]:::command
+  C2 --> P1[Impedir saldo negativo]:::policy
+  P1 --> E2[Estoque ajustado]:::event
+  OS[Orcamento aprovado]:::event --> C3[Consumir pecas da OS]:::command
+  C3 --> P2[Bloquear e validar saldos]:::policy
+  P2 --> E3[Pecas baixadas]:::event
+  E3 --> E4[Movimentos registrados]:::event
+  classDef actor fill:#8e44ad,color:#fff;
+  classDef command fill:#2980b9,color:#fff;
+  classDef event fill:#e67e22,color:#fff;
+  classDef policy fill:#af7ac5,color:#fff;
+  classDef aggregate fill:#f4d03f,color:#111;
+
