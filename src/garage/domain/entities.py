@@ -13,45 +13,6 @@ def utc_now() -> datetime:
     return datetime.now(UTC)
 
 
-@dataclass(slots=True)
-class Customer:
-    id: str
-    name: str
-    document: str
-    email: str
-    phone: str
-
-
-@dataclass(slots=True)
-class Vehicle:
-    id: str
-    customer_id: str
-    plate: str
-    brand: str
-    model: str
-    year: int
-
-
-@dataclass(slots=True)
-class CatalogService:
-    id: str
-    name: str
-    description: str
-    price: Decimal
-    estimated_minutes: int
-    active: bool = True
-
-
-@dataclass(slots=True)
-class Part:
-    id: str
-    name: str
-    sku: str
-    unit_price: Decimal
-    stock_quantity: int
-    active: bool = True
-
-
 @dataclass(frozen=True, slots=True)
 class WorkOrderItem:
     reference_id: str
@@ -147,7 +108,15 @@ class WorkOrderAggregate:
         self.finalized_at = at or utc_now()
 
     def deliver(self, at: datetime | None = None) -> None:
-        self._require_status(WorkOrderStatus.COMPLETED)
+        completed_service = self.status == WorkOrderStatus.COMPLETED
+        rejected_without_service = (
+            self.status == WorkOrderStatus.WAITING_APPROVAL
+            and self.quote_status == QuoteStatus.REJECTED
+        )
+        if not (completed_service or rejected_without_service):
+            raise InvalidTransitionError(
+                "A entrega exige servico finalizado ou orcamento rejeitado."
+            )
         self.status = WorkOrderStatus.DELIVERED
         self.delivered_at = at or utc_now()
 

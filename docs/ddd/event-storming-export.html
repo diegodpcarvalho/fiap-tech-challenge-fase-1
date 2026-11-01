@@ -29,8 +29,8 @@
   <h2>2. Acompanhamento, orçamento e execução</h2>
   <img src="images/event-storming-acompanhamento.svg" alt="Event Storming do acompanhamento da OS">
   <ul>
-    <li>Rejeição não movimenta estoque e permite revisar os itens.</li>
-    <li>Aprovação, baixa de estoque e início da execução formam uma transação.</li>
+    <li>Rejeição não movimenta estoque e permite revisar os itens ou devolver o veículo.</li>
+    <li>Aprovação bloqueia primeiro a OS e depois as peças na mesma transação.</li>
     <li>A máquina de estados recusa saltos e repetições inválidas.</li>
   </ul>
 
@@ -39,6 +39,7 @@
   <ul>
     <li>Todo ajuste gera um movimento com motivo.</li>
     <li>Bloqueio de linha e constraint impedem saldo negativo.</li>
+    <li>Estoque é suporte CRUD/transacional, não um agregado rico no código.</li>
   </ul>
 </body>
 </html>

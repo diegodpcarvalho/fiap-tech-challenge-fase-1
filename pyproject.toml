@@ -33,6 +33,9 @@ where = ["src"]
 addopts = "-q --strict-markers --cov=garage.domain --cov=garage.application --cov-report=term-missing --cov-fail-under=80"
 testpaths = ["tests"]
 pythonpath = ["src"]
+markers = [
+  "postgres: testes que exigem PostgreSQL real para semantica de concorrencia",
+]
 
 [tool.coverage.run]
 branch = true

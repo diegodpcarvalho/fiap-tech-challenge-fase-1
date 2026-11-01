@@ -80,8 +80,9 @@ procure `InvalidTransitionError` no código.
 - JWT autentica rotas administrativas; hash de senha e JWT são coisas diferentes;
 - a API usa 404 para recurso ausente, 409 para conflito de estado e 422 para dado de
   domínio inválido;
-- a transação de aprovação bloqueia as linhas das peças, verifica saldo, baixa estoque
-  e atualiza a OS de forma atômica.
+- a transação de aprovação bloqueia primeiro a OS e depois as peças, verifica saldo,
+  baixa estoque e atualiza a OS de forma atômica;
+- o CPF/CNPJ da consulta pública segue no corpo de um `POST`, não na URL ou query string.
 
 ## Dia 3 — qualidade, evidências e apresentação
 
@@ -97,7 +98,9 @@ pip-audit -r requirements.txt --progress-spinner off
 Compare testes unitários e de integração:
 
 - unitário: testa a regra sem HTTP e sem banco;
-- integração: envia requisições e usa o banco SQLite em memória;
+- integração rápida: envia requisições e usa o banco SQLite em memória;
+- concorrência: executa 20 decisões paralelas em PostgreSQL real, pois SQLite ignora
+  `SELECT ... FOR UPDATE`;
 - cobertura: mede linhas e desvios executados, mas não substitui bons cenários.
 
 Exercício: leia `test_insufficient_stock_prevents_approval...` e explique por que ele

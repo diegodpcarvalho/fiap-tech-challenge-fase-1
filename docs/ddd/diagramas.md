@@ -33,6 +33,7 @@ classDiagram
     +deliver()
   }
   class WorkOrderItem {
+    <<value object>>
     +reference_id
     +description
     +unit_price
@@ -48,9 +49,10 @@ classDiagram
   LicensePlate ..> WorkOrderAggregate : identifica veículo
 ```
 
-O agregado `WorkOrderAggregate` é a fronteira de consistência das transições. A peça
-é outra raiz de consistência para estoque; sua atualização é coordenada com a OS pela
-transação do caso de uso de aprovação.
+O agregado `WorkOrderAggregate` é a fronteira de consistência das transições.
+`WorkOrderItem` não possui identidade própria e é imutável: trata-se de um objeto de
+valor. Cadastro, catálogo e estoque são subdomínios de suporte com CRUD simples; na
+aprovação, o serviço de aplicação coordena OS e peças na mesma transação.
 
 ## Máquina de estados
 
@@ -60,6 +62,7 @@ stateDiagram-v2
   RECEBIDA --> EM_DIAGNOSTICO: iniciar diagnóstico
   EM_DIAGNOSTICO --> AGUARDANDO_APROVACAO: enviar orçamento
   AGUARDANDO_APROVACAO --> EM_DIAGNOSTICO: rejeitar e revisar itens
+  AGUARDANDO_APROVACAO --> ENTREGUE: rejeitar e devolver sem execução
   AGUARDANDO_APROVACAO --> EM_EXECUCAO: aprovar + baixar estoque
   EM_EXECUCAO --> FINALIZADA: finalizar serviço
   FINALIZADA --> ENTREGUE: entregar veículo

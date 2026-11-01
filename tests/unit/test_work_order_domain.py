@@ -54,6 +54,20 @@ def test_rejected_quote_can_be_revised():
     assert work_order.quote_total == Decimal("120.00")
 
 
+def test_rejected_quote_can_be_delivered_without_execution():
+    work_order = order()
+    at = datetime(2026, 1, 1, tzinfo=UTC)
+    work_order.start_diagnosis()
+    work_order.send_quote()
+    work_order.decide_quote(False)
+    work_order.deliver(at)
+    assert work_order.status == WorkOrderStatus.DELIVERED
+    assert work_order.quote_status == QuoteStatus.REJECTED
+    assert work_order.execution_started_at is None
+    assert work_order.finalized_at is None
+    assert work_order.delivered_at == at
+
+
 def test_items_cannot_change_during_execution():
     work_order = order()
     work_order.start_diagnosis()

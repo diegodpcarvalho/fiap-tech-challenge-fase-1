@@ -9,6 +9,8 @@ flowchart LR
   P1 -->|Rejeitado| E3[Orcamento rejeitado]:::event
   E3 --> C4[Revisar itens]:::command
   C4 --> E1
+  E3 --> C7[Devolver veiculo sem execucao]:::command
+  C7 --> E7
   P1 -->|Aprovado| P2[Validar e baixar estoque]:::policy
   P2 --> E4[Orcamento aprovado]:::event
   E4 --> E5[Execucao iniciada]:::event

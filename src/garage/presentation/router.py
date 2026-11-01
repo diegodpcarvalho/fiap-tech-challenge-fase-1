@@ -21,6 +21,7 @@ from garage.presentation.schemas import (
     PartCreate,
     PartRead,
     PartUpdate,
+    PublicTrackingRequest,
     PublicWorkOrderRead,
     QuoteDecision,
     StockAdjustment,
@@ -337,14 +338,15 @@ def average_execution_time(app: Application, _admin: AdminUser):
     return app.average_execution_time()
 
 
-# Customer-facing API: tracking code + document prevent simple enumeration.
-@router.get(
+# Customer-facing API: the document stays in the request body so access logs do
+# not persist CPF/CNPJ in the URL (CWE-598).
+@router.post(
     "/public/work-orders/{tracking_code}",
     response_model=PublicWorkOrderRead,
     tags=["Cliente"],
 )
-def public_work_order(tracking_code: str, document: str, app: Application):
-    return _work_order_response(app.get_public_work_order(tracking_code, document))
+def public_work_order(tracking_code: str, payload: PublicTrackingRequest, app: Application):
+    return _work_order_response(app.get_public_work_order(tracking_code, payload.document))
 
 
 @router.post(

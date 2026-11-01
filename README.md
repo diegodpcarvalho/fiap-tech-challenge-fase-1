@@ -20,7 +20,7 @@ O MVP substitui anotações e planilhas da oficina por uma API que:
 - controla as transições `RECEBIDA → EM_DIAGNOSTICO → AGUARDANDO_APROVACAO →
   EM_EXECUCAO → FINALIZADA → ENTREGUE`;
 - permite ao cliente acompanhar e aprovar/rejeitar o orçamento usando código da OS
-  e CPF/CNPJ;
+  e CPF/CNPJ enviado no corpo da requisição, sem dado pessoal na URL;
 - baixa o estoque somente quando o orçamento é aprovado;
 - oferece CRUDs e métrica de tempo médio para a administração;
 - protege todas as rotas administrativas com JWT.
@@ -43,6 +43,11 @@ A camada de domínio não importa FastAPI nem SQLAlchemy. A aplicação coordena
 casos de uso e a transação; a infraestrutura persiste o estado; a apresentação faz
 validação de formato, autenticação e conversão HTTP.
 
+O modelo rico está concentrado no Core Domain da Ordem de Serviço. Cliente, veículo,
+catálogo e peça são subdomínios de suporte implementados como CRUDs simples sobre os
+modelos persistentes. `WorkOrderItem` é um objeto de valor imutável usado como snapshot
+do orçamento, não uma entidade independente.
+
 Documentação detalhada:
 
 - [Visão DDD e diagramas](docs/ddd/diagramas.md)
@@ -58,7 +63,8 @@ Documentação detalhada:
 - Python 3.12+;
 - FastAPI e OpenAPI/Swagger;
 - SQLAlchemy 2;
-- PostgreSQL 17 em produção local e SQLite em memória nos testes;
+- PostgreSQL 17 em produção local e no teste de concorrência; SQLite em memória nos
+  testes rápidos;
 - PyJWT, hash de senha com `scrypt` da biblioteca padrão;
 - Pytest e pytest-cov;
 - Docker e Docker Compose;
@@ -67,10 +73,10 @@ Documentação detalhada:
 ## Por que PostgreSQL
 
 O PostgreSQL foi escolhido por oferecer transações ACID, restrições de integridade,
-índices e bloqueio de linhas com `SELECT ... FOR UPDATE`. Isso é essencial no ponto
-mais sensível do domínio: duas aprovações concorrentes não podem consumir a mesma
-unidade de estoque. SQLite permanece somente nos testes rápidos; ele não é a escolha
-de produção.
+índices e bloqueio de linhas com `SELECT ... FOR UPDATE`. Na aprovação, a aplicação
+bloqueia primeiro a OS e depois as peças em ordem determinística. Assim, duas decisões
+concorrentes não podem aprovar a mesma OS nem consumir o estoque duas vezes. SQLite
+permanece somente nos testes rápidos; a concorrência é verificada em PostgreSQL real.
 
 ## Pré-requisitos
 
@@ -144,8 +150,9 @@ No Swagger:
 3. clique em **Authorize** e informe apenas o token;
 4. use os endpoints administrativos.
 
-As rotas `/api/v1/public/work-orders/...` simulam o aplicativo do cliente e exigem o
-código imprevisível da OS mais o CPF/CNPJ associado.
+A consulta `POST /api/v1/public/work-orders/{tracking_code}` simula o aplicativo do
+cliente e recebe o CPF/CNPJ no corpo JSON. O documento não aparece na URL nem no access
+log padrão. A decisão do orçamento também usa `POST` com corpo JSON.
 
 ## Testes e cobertura
 
@@ -156,8 +163,9 @@ pytest
 Resultado verificado em 31/10/2026:
 
 ```text
-25 passed
-90.16% de cobertura nas camadas de domínio e aplicação
+27 passed, 1 skipped sem a URL do banco de teste
+28 passed no CI, incluindo concorrência em PostgreSQL
+89.47% de cobertura nas camadas de domínio e aplicação nos testes rápidos
 ```
 
 Para gerar evidências adicionais:
@@ -196,7 +204,8 @@ src/garage/
 └── main.py           # composição e tratamento global de erros
 tests/
 ├── unit/             # regras de domínio
-└── integration/      # API e banco em memória
+├── integration/      # API e banco em memória
+└── postgres/         # concorrência e bloqueio de linhas no banco real
 docs/
 ├── ddd/              # Event Storming, diagramas, SVGs e PDFs exportados
 ├── entrega/          # template do PDF e roteiro do vídeo
@@ -210,6 +219,8 @@ docs/
   no catálogo não muda um orçamento já criado;
 - exclusão de serviços e peças é lógica (`active=false`) para preservar histórico;
 - estoque é validado novamente no instante da aprovação e baixado na mesma transação;
+- a OS é bloqueada antes das peças, impedindo aprovação concorrente em duplicidade;
+- orçamento rejeitado pode ser revisado ou encerrado com devolução sem execução;
 - cliente ou veículo com OS não pode ser excluído;
 - segredos falham de forma explícita na inicialização e ficam fora do Git.
 

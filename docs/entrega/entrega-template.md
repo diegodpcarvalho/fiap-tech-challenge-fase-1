@@ -54,7 +54,8 @@ testes, cobertura e análise de vulnerabilidades.
 - Transições da OS: `domain/entities.py::WorkOrderAggregate`.
 - Estoque transacional: `application/services.py::decide_quote`.
 - Testes unitários e de integração: `tests/`.
-- Cobertura verificada: **90,16%** nas camadas críticas, **25 testes aprovados**.
+- Cobertura rápida verificada: **89,47%** nas camadas críticas; **28 testes no CI**,
+  incluindo concorrência em PostgreSQL real.
 - Dockerfile e Compose: raiz do repositório.
 - Swagger: `/docs`; OpenAPI: `/openapi.json`.
 

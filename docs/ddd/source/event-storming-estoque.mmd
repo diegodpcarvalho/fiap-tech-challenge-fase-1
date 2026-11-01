@@ -1,7 +1,6 @@
 flowchart LR
   ADM[Administrador]:::actor --> C1[Cadastrar peca]:::command
-  C1 --> AG[Estoque da peca]:::aggregate
-  AG --> E1[Peca cadastrada]:::event
+  C1 --> E1[Peca cadastrada]:::event
   ADM --> C2[Ajustar estoque]:::command
   C2 --> P1[Impedir saldo negativo]:::policy
   P1 --> E2[Estoque ajustado]:::event
@@ -13,5 +12,4 @@ flowchart LR
   classDef command fill:#2980b9,color:#fff;
   classDef event fill:#e67e22,color:#fff;
   classDef policy fill:#af7ac5,color:#fff;
-  classDef aggregate fill:#f4d03f,color:#111;
 
