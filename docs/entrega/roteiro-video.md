@@ -34,7 +34,7 @@ Meta sugerida: 12 a 14 minutos, deixando margem para pausas.
 3. criar OS com veículo, serviço e peça;
 4. destacar cálculo automático e código de acompanhamento;
 5. iniciar diagnóstico e enviar orçamento;
-6. consultar pela API pública;
+6. consultar pela API pública via `POST`, com CPF/CNPJ no corpo;
 7. aprovar orçamento;
 8. mostrar mudança automática para `EM_EXECUCAO` e baixa do estoque;
 9. finalizar e entregar;
@@ -44,9 +44,9 @@ Se houver tempo, mostre rapidamente uma transição inválida retornando 409.
 
 ## 10:30–12:30 — testes e qualidade
 
-- executar `pytest` e mostrar 25 testes + cobertura acima de 80%;
+- executar `pytest` e mostrar 28 testes, incluindo a corrida em PostgreSQL;
 - explicar um teste unitário da máquina de estados;
-- explicar um teste de integração de estoque insuficiente;
+- explicar os testes de estoque insuficiente e aprovação concorrente;
 - mostrar Ruff, Bandit e pip-audit sem achados.
 
 ## 12:30–13:30 — segurança e encerramento

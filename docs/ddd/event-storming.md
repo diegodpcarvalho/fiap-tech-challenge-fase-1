@@ -47,6 +47,8 @@ flowchart LR
   P1 -->|Rejeitado| E3[Orçamento rejeitado]:::event
   E3 --> C4[Revisar itens]:::command
   C4 --> E1
+  E3 --> C7[Devolver veículo sem execução]:::command
+  C7 --> E7
   P1 -->|Aprovado| P2[Validar e baixar estoque]:::policy
   P2 --> E4[Orçamento aprovado]:::event
   E4 --> E5[Execução iniciada]:::event
@@ -65,6 +67,7 @@ Regras associadas:
 
 - rejeição não movimenta estoque;
 - revisão após rejeição retorna a OS ao diagnóstico;
+- após rejeição, o veículo também pode ser entregue sem execução;
 - aprovação e baixa de estoque pertencem à mesma transação;
 - transições fora da sequência são recusadas.
 
@@ -73,8 +76,7 @@ Regras associadas:
 ```mermaid
 flowchart LR
   ADM[Administrador]:::actor --> C1[Cadastrar peça]:::command
-  C1 --> AG[Estoque da peça]:::aggregate
-  AG --> E1[Peça cadastrada]:::event
+  C1 --> E1[Peça cadastrada]:::event
   ADM --> C2[Ajustar estoque]:::command
   C2 --> P1[Impedir saldo negativo]:::policy
   P1 --> E2[Estoque ajustado]:::event
@@ -87,8 +89,10 @@ flowchart LR
   classDef command fill:#2980b9,color:#fff;
   classDef event fill:#e67e22,color:#fff;
   classDef policy fill:#af7ac5,color:#fff;
-  classDef aggregate fill:#f4d03f,color:#111;
 ```
+
+Estoque é um subdomínio de suporte com CRUD e regras transacionais no serviço de
+aplicação; não há um agregado rico de estoque no código deste MVP.
 
 ## Catálogo de eventos de domínio levantados
 
@@ -103,6 +107,7 @@ flowchart LR
 - ExecuçãoIniciada;
 - EstoqueBaixado;
 - OrdemDeServiçoFinalizada;
+- VeículoDevolvidoSemExecução;
 - VeículoEntregue.
 
 No MVP, esses eventos são representados por mudanças de estado transacionais. Uma

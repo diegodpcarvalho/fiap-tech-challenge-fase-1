@@ -161,14 +161,21 @@ def test_complete_work_order_flow_and_metrics(
     assert quote.json()["status"] == "AGUARDANDO_APROVACAO"
     assert quote.json()["quote_status"] == "PENDENTE"
 
-    public = client.get(
+    public = client.post(
         f"/api/v1/public/work-orders/{order['tracking_code']}",
-        params={"document": customer_payload["document"]},
+        json={"document": customer_payload["document"]},
     )
     assert public.status_code == 200
-    wrong_document = client.get(
+    assert (
+        client.get(
+            f"/api/v1/public/work-orders/{order['tracking_code']}",
+            params={"document": customer_payload["document"]},
+        ).status_code
+        == 405
+    )
+    wrong_document = client.post(
         f"/api/v1/public/work-orders/{order['tracking_code']}",
-        params={"document": "11222333000181"},
+        json={"document": "11222333000181"},
     )
     assert wrong_document.status_code == 404
 
@@ -222,6 +229,34 @@ def test_rejected_quote_can_be_revised(
     assert revised.status_code == 200, revised.text
     assert revised.json()["status"] == "EM_DIAGNOSTICO"
     assert revised.json()["quote_total"] == "300.00"
+
+
+def test_rejected_quote_can_be_delivered_without_execution(
+    client: TestClient, auth_headers: dict, customer_payload: dict
+):
+    customer = create_customer(client, auth_headers, customer_payload)
+    service, part = create_catalog(client, auth_headers)
+    order = create_order(client, auth_headers, customer, service, part)
+    client.post(f"/api/v1/work-orders/{order['id']}/diagnosis", headers=auth_headers)
+    client.post(f"/api/v1/work-orders/{order['id']}/quote", headers=auth_headers)
+    rejected = client.post(
+        f"/api/v1/public/work-orders/{order['tracking_code']}/quote-decision",
+        json={"document": customer_payload["document"], "approved": False},
+    )
+    assert rejected.json()["quote_status"] == "REJEITADO"
+
+    delivered = client.post(f"/api/v1/work-orders/{order['id']}/deliver", headers=auth_headers)
+    body = delivered.json()
+    assert delivered.status_code == 200, delivered.text
+    assert body["status"] == "ENTREGUE"
+    assert body["quote_status"] == "REJEITADO"
+    assert body["execution_started_at"] is None
+    assert body["finalized_at"] is None
+    assert body["delivered_at"] is not None
+    assert (
+        client.get(f"/api/v1/parts/{part['id']}", headers=auth_headers).json()["stock_quantity"]
+        == 10
+    )
 
 
 def test_insufficient_stock_prevents_approval_and_invalid_transition_returns_conflict(

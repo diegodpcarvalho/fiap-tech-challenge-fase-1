@@ -166,6 +166,10 @@ class QuoteDecision(ApiModel):
     approved: bool
 
 
+class PublicTrackingRequest(ApiModel):
+    document: str = Field(min_length=11, max_length=18)
+
+
 class WorkOrderItemRead(ApiModel):
     reference_id: str
     description: str

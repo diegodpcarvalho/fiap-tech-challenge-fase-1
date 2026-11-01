@@ -288,9 +288,11 @@ class GarageApplication:
             raise NotFoundError("Ordem de servico nao encontrada.")
         return model
 
-    def get_public_work_order(self, tracking_code: str, document: str) -> WorkOrderModel:
+    def get_public_work_order(
+        self, tracking_code: str, document: str, *, for_update: bool = False
+    ) -> WorkOrderModel:
         normalized_document = Document(document).value
-        model = self.session.scalar(
+        statement = (
             self._work_order_statement()
             .join(CustomerModel, CustomerModel.id == WorkOrderModel.customer_id)
             .where(
@@ -298,6 +300,9 @@ class GarageApplication:
                 CustomerModel.document == normalized_document,
             )
         )
+        if for_update:
+            statement = statement.with_for_update(of=WorkOrderModel)
+        model = self.session.scalar(statement)
         if not model:
             raise NotFoundError("Ordem de servico nao encontrada.")
         return model
@@ -327,13 +332,19 @@ class GarageApplication:
         return self._apply_transition(work_order_id, "send_quote")
 
     def decide_quote(self, tracking_code: str, document: str, approved: bool) -> WorkOrderModel:
-        model = self.get_public_work_order(tracking_code, document)
+        # A OS e a primeira fronteira de consistencia: apenas uma transacao pode
+        # decidir o mesmo orcamento. As pecas sao bloqueadas depois, em ordem
+        # deterministica, para reduzir o risco de deadlock entre ordens diferentes.
+        model = self.get_public_work_order(tracking_code, document, for_update=True)
         aggregate = self._to_aggregate(model)
         if approved:
             part_ids = sorted(item.part_id for item in model.part_items)
             locked_parts = list(
                 self.session.scalars(
-                    select(PartModel).where(PartModel.id.in_(part_ids)).with_for_update()
+                    select(PartModel)
+                    .where(PartModel.id.in_(part_ids))
+                    .order_by(PartModel.id)
+                    .with_for_update()
                 )
             )
             parts_by_id = {part.id: part for part in locked_parts}

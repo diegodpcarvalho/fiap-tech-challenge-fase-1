@@ -44,7 +44,7 @@ def create_app() -> FastAPI:
         version="1.0.0",
         description=(
             "API do MVP da oficina. Rotas administrativas usam JWT; rotas publicas de "
-            "acompanhamento usam codigo da OS e CPF/CNPJ."
+            "acompanhamento usam codigo da OS e CPF/CNPJ enviado no corpo da requisicao."
         ),
         lifespan=lifespan,
     )

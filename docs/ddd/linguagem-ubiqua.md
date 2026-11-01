@@ -14,7 +14,7 @@ e conversas do time.
 | Orçamento | Soma dos snapshots de serviços e peças multiplicados pelas quantidades. |
 | Snapshot | Cópia de descrição e preço feita na inclusão do item, preservando o histórico. |
 | Aprovação | Decisão positiva do cliente que inicia a execução e autoriza a baixa de estoque. |
-| Rejeição | Decisão negativa que mantém a OS aguardando revisão sem baixar estoque. |
+| Rejeição | Decisão negativa que não baixa estoque e permite revisar o orçamento ou devolver o veículo sem execução. |
 | Código de acompanhamento | Identificador imprevisível usado pelo cliente para consultar a OS. |
 | Movimento de estoque | Registro imutável de entrada ou saída, com motivo e possível OS de origem. |
 | Tempo de execução | Intervalo entre aprovação/início da execução e finalização. |
@@ -28,7 +28,7 @@ e conversas do time.
 | AGUARDANDO_APROVACAO | Orçamento enviado e aguardando decisão do cliente. |
 | EM_EXECUCAO | Orçamento aprovado e trabalho autorizado. |
 | FINALIZADA | Trabalho concluído, aguardando entrega. |
-| ENTREGUE | Veículo devolvido ao cliente; ciclo encerrado. |
+| ENTREGUE | Veículo devolvido após serviço finalizado ou após orçamento rejeitado; ciclo encerrado. |
 
 ## Invariantes
 
@@ -38,5 +38,6 @@ e conversas do time.
 - Uma placa pertence a apenas um cliente.
 - Um orçamento só pode ser decidido quando estiver pendente.
 - Aprovação só ocorre se todas as peças tiverem estoque suficiente.
-- Uma OS só é finalizada após entrar em execução e só é entregue após finalizada.
+- Uma OS só é finalizada após entrar em execução; a entrega exige serviço finalizado ou
+  orçamento rejeitado.
 
