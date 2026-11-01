@@ -1,0 +1,6 @@
+flowchart LR
+  ID[Identidade e Acesso<br/>JWT e administrador] --> OS
+  CAD[Cadastro<br/>Cliente e Veiculo] --> OS[Ordens de Servico<br/>Core Domain]
+  CAT[Catalogo<br/>Servicos e precos] --> OS
+  INV[Estoque<br/>Pecas e movimentos] <--> OS
+

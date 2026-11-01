@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "garage-api"
+version = "1.0.0"
+description = "MVP de gestao de oficina mecanica - FIAP Tech Challenge Fase 1"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115,<1.0",
+  "uvicorn[standard]>=0.34,<1.0",
+  "SQLAlchemy>=2.0.36,<3.0",
+  "psycopg[binary]>=3.2,<4.0",
+  "PyJWT>=2.10,<3.0",
+  "email-validator>=2.2,<3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3,<10.0",
+  "pytest-cov>=6.0,<8.0",
+  "httpx2>=2.16,<3.0",
+  "ruff>=0.9,<1.0",
+  "bandit>=1.8,<2.0",
+  "pip-audit>=2.8,<3.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers --cov=garage.domain --cov=garage.application --cov-report=term-missing --cov-fail-under=80"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.coverage.run]
+branch = true
+source = ["garage.domain", "garage.application"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_also = [
+  "if TYPE_CHECKING:",
+  "@overload",
+  '\.\.\.',
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S"]
+ignore = ["S101"]
+

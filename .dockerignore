@@ -1,0 +1,13 @@
+.git
+.github
+.venv
+__pycache__
+.pytest_cache
+.coverage
+htmlcov
+*.db
+.env
+.demo-credentials
+docs
+tests
+

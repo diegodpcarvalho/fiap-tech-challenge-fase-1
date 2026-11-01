@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Event Storming — Oficina API</title>
+  <style>
+    @page { size: A4 landscape; margin: 12mm; }
+    body { font: 14px Arial, sans-serif; color: #17202a; }
+    h1, h2 { color: #1b4f72; }
+    h2 { break-before: page; }
+    h2:first-of-type { break-before: auto; }
+    img { display: block; width: 100%; max-height: 145mm; object-fit: contain; }
+    .legend { padding: 8px 12px; background: #f4f6f7; border-left: 4px solid #2980b9; }
+    li { margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <h1>Event Storming — Sistema Integrado da Oficina</h1>
+  <p class="legend">Ator: roxo · Comando: azul · Evento: laranja · Política: lilás · Agregado: amarelo.</p>
+
+  <h2>1. Criação da Ordem de Serviço</h2>
+  <img src="images/event-storming-criacao.svg" alt="Event Storming da criação da OS">
+  <ul>
+    <li>CPF/CNPJ e placa são validados e normalizados.</li>
+    <li>Uma placa existente não pode ser associada a outro cliente.</li>
+    <li>Preço e descrição são copiados para preservar o orçamento.</li>
+  </ul>
+
+  <h2>2. Acompanhamento, orçamento e execução</h2>
+  <img src="images/event-storming-acompanhamento.svg" alt="Event Storming do acompanhamento da OS">
+  <ul>
+    <li>Rejeição não movimenta estoque e permite revisar os itens.</li>
+    <li>Aprovação, baixa de estoque e início da execução formam uma transação.</li>
+    <li>A máquina de estados recusa saltos e repetições inválidas.</li>
+  </ul>
+
+  <h2>3. Gestão de peças e insumos</h2>
+  <img src="images/event-storming-estoque.svg" alt="Event Storming do estoque">
+  <ul>
+    <li>Todo ajuste gera um movimento com motivo.</li>
+    <li>Bloqueio de linha e constraint impedem saldo negativo.</li>
+  </ul>
+</body>
+</html>
+

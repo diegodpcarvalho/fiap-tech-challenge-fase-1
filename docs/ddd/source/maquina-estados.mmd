@@ -1,0 +1,10 @@
+stateDiagram-v2
+  [*] --> RECEBIDA: criar OS
+  RECEBIDA --> EM_DIAGNOSTICO: iniciar diagnostico
+  EM_DIAGNOSTICO --> AGUARDANDO_APROVACAO: enviar orcamento
+  AGUARDANDO_APROVACAO --> EM_DIAGNOSTICO: rejeitar e revisar itens
+  AGUARDANDO_APROVACAO --> EM_EXECUCAO: aprovar e baixar estoque
+  EM_EXECUCAO --> FINALIZADA: finalizar servico
+  FINALIZADA --> ENTREGUE: entregar veiculo
+  ENTREGUE --> [*]
+

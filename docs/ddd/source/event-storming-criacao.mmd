@@ -1,0 +1,18 @@
+flowchart LR
+  A[Cliente]:::actor --> C1[Identificar cliente]:::command
+  C1 --> E1[Cliente identificado]:::event
+  E1 --> C2[Cadastrar ou localizar veiculo]:::command
+  C2 --> E2[Veiculo associado]:::event
+  E2 --> C3[Abrir OS]:::command
+  C3 --> AG[Ordem de Servico]:::aggregate
+  AG --> E3[OS recebida]:::event
+  E3 --> C4[Adicionar servicos e pecas]:::command
+  C4 --> E4[Itens adicionados]:::event
+  E4 --> P1[Recalcular orcamento]:::policy
+  P1 --> E5[Orcamento calculado]:::event
+  classDef actor fill:#8e44ad,color:#fff;
+  classDef command fill:#2980b9,color:#fff;
+  classDef event fill:#e67e22,color:#fff;
+  classDef policy fill:#af7ac5,color:#fff;
+  classDef aggregate fill:#f4d03f,color:#111;
+

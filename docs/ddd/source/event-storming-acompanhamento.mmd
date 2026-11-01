@@ -1,0 +1,23 @@
+flowchart LR
+  T[Tecnico]:::actor --> C1[Iniciar diagnostico]:::command
+  C1 --> E1[Diagnostico iniciado]:::event
+  E1 --> C2[Enviar orcamento]:::command
+  C2 --> E2[Orcamento aguardando aprovacao]:::event
+  E2 --> CL[Cliente]:::actor
+  CL --> C3[Aprovar ou rejeitar]:::command
+  C3 --> P1{Decisao?}:::policy
+  P1 -->|Rejeitado| E3[Orcamento rejeitado]:::event
+  E3 --> C4[Revisar itens]:::command
+  C4 --> E1
+  P1 -->|Aprovado| P2[Validar e baixar estoque]:::policy
+  P2 --> E4[Orcamento aprovado]:::event
+  E4 --> E5[Execucao iniciada]:::event
+  E5 --> C5[Finalizar OS]:::command
+  C5 --> E6[OS finalizada]:::event
+  E6 --> C6[Entregar veiculo]:::command
+  C6 --> E7[Veiculo entregue]:::event
+  classDef actor fill:#8e44ad,color:#fff;
+  classDef command fill:#2980b9,color:#fff;
+  classDef event fill:#e67e22,color:#fff;
+  classDef policy fill:#af7ac5,color:#fff;
+
