@@ -7,8 +7,8 @@ Python com FastAPI, DDD pragmático e arquitetura em camadas.
 **Grupo 147 — integrante:** Diego de Paula Carvalho — RM 377208 — Discord `diego_oak`  
 **Contato:** diegodpcarvalho@gmail.com
 
-> Links da entrega: substitua os campos `PREENCHER` em
-> [`docs/entrega/entrega-template.md`](docs/entrega/entrega-template.md) antes de publicar.
+> Estado da entrega: código, testes e documentação finalizados. O vídeo obrigatório no
+> YouTube não foi apresentado; essa ausência está registrada de forma explícita no PDF.
 
 ## Objetivo e solução
 
@@ -228,7 +228,8 @@ docs/
 
 - Repositório: <https://github.com/diegodpcarvalho/fiap-tech-challenge-fase-1>
 - Branch da entrega: `main`
-- Tag/hash da entrega: **PREENCHER APÓS O MERGE FINAL**
+- Tag da entrega: [`v1.0.0-fase1`](https://github.com/diegodpcarvalho/fiap-tech-challenge-fase-1/tree/v1.0.0-fase1)
+- Hash completo: registrado no PDF final, a partir do commit apontado pela tag
 - Documentação DDD pública: <https://github.com/diegodpcarvalho/fiap-tech-challenge-fase-1/tree/main/docs/ddd>
-- Vídeo público no YouTube: **PREENCHER**
+- Vídeo público no YouTube: **não apresentado nesta entrega**
 
