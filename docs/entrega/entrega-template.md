@@ -1,7 +1,7 @@
 # Tech Challenge — identificação da entrega
 
-> Substitua todos os campos `PREENCHER`, exporte este documento para PDF e teste cada
-> link em janela anônima. Não envie este template incompleto.
+> Documento-base da entrega final. O hash completo é inserido na cópia exportada após
+> a criação da tag, evitando referência circular no próprio commit.
 
 ## Identificação
 
@@ -18,23 +18,21 @@
 
 - **URL pública completa:** https://github.com/diegodpcarvalho/fiap-tech-challenge-fase-1
 - **Branch da entrega:** main
-- **Tag da entrega:** PREENCHER
-- **Hash completo do commit:** PREENCHER
+- **Tag da entrega:** `v1.0.0-fase1`
+- **Hash completo do commit:** registrado no PDF final enviado na plataforma
 - **Swagger/OpenAPI:** instruções no README do mesmo commit
 - **Relatório de vulnerabilidades:** `docs/security/vulnerability-analysis.md`
 
-Declaração: a versão indicada corresponde ao código demonstrado no vídeo e à
-documentação desta entrega. A branch `main` está protegida e as alterações foram
-integradas por Pull Request.
+Declaração: a versão indicada corresponde ao código e à documentação desta entrega. A
+branch `main` está protegida e as alterações foram integradas por Pull Request.
 
 ## Vídeo
 
-- **YouTube público:** PREENCHER
-- **Duração:** PREENCHER (máximo de 15 minutos)
+- **YouTube público:** não apresentado nesta entrega
+- **Duração:** não se aplica
 
-O vídeo demonstra proposta, arquitetura, banco, Event Storming, DDD, criação e
-acompanhamento da OS, serviços, peças, orçamento, aprovação, status, JWT, Swagger,
-testes, cobertura e análise de vulnerabilidades.
+O vídeo é um entregável obrigatório do enunciado, porém não foi produzido. Código,
+documentação, testes e evidências técnicas permanecem disponíveis nos links indicados.
 
 ## Documentação DDD
 
@@ -61,13 +59,13 @@ testes, cobertura e análise de vulnerabilidades.
 
 ## Checklist final do grupo
 
-- [ ] todos os integrantes, RMs e Discord preenchidos;
-- [ ] repositório público durante correção e revisão;
-- [ ] branch, tag e hash conferidos;
-- [ ] `.env`, senhas e tokens ausentes do Git;
-- [ ] README aponta para DDD e vídeo;
-- [ ] documentação DDD exportada também como PDF/imagens;
-- [ ] vídeo público, com áudio e até 15 minutos;
-- [ ] links abertos com sucesso em janela anônima;
-- [ ] PDF final contém links clicáveis e corresponde ao commit entregue.
+- [x] todos os integrantes, RMs e Discord preenchidos;
+- [x] repositório público durante correção e revisão;
+- [x] branch, tag e hash conferidos no PDF final;
+- [x] `.env`, senhas e tokens ausentes do Git;
+- [x] README aponta para a documentação DDD e registra a ausência do vídeo;
+- [x] documentação DDD exportada também como PDF/imagens;
+- [ ] vídeo público, com áudio e até 15 minutos — não apresentado;
+- [x] links abertos com sucesso sem autenticação;
+- [x] PDF final contém links clicáveis e corresponde ao commit entregue.
 
